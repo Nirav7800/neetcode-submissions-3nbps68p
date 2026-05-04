@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int dp[11][10001];
+    int solve(vector<int>&coins, int n,int amount){
+        if(amount==0) {
+            return 0;
+        }
+
+        if(n==0) {
+            return INT_MAX-1;
+        }
+        if(dp[n][amount]!=-1) {
+            return dp[n][amount];
+        }
+
+        //take
+        int total=INT_MAX-1;
+        if(coins[n-1]<=amount) {
+             total=1+solve(coins,n,amount-coins[n-1]);
+        }
+        //skip
+        total=min(total,solve(coins,n-1,amount));
+        return  dp[n][amount]=total;
+    }
+    int coinChange(vector<int>& coins, int amount) {
+        int n = coins.size();
+        for(int i=0;i<=10;i++) {
+            for(int j=0;j<=10000;j++) {
+                dp[i][j]=-1;
+            }
+        }
+        int coinsneeded = solve(coins,n,amount);
+        
+        return coinsneeded==INT_MAX-1?-1:coinsneeded;
+    }
+};
